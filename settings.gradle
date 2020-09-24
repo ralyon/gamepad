@@ -1,0 +1,3 @@
+include ':Gamepad'
+include ':app'
+rootProject.name = "GamepadExample"
