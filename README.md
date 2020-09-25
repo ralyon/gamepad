@@ -33,15 +33,25 @@ override fun dispatchGenericMotionEvent(event: MotionEvent): Boolean {
 }
 ```
 
-Now you can call ``getGamepadMap()`` any time you need to know the state of the gamepad buttons. The method returns a ``MutableMap<Int, Float>`` where the key is the button identifier and the value change from 0f to 1f if the button is pressed.
+Now you can call ``getGamepadMap()`` any time you need to know the state of the gamepad buttons. The method returns a ``Map<Int, Float>`` where the key is the button identifier and the value change from 0 to 1 if the button is pressed.
 
 For example:
 ```kotlin
 val map = gamepad.getGamepadMap()
-if (map[GamepadButton.BUTTON_X] == 1f) {
-  // the button X is pressed
+
+val buttonX = map[GamepadButton.BUTTON_X]
+if (buttonX == 1f) {
+  // Button X is pressed
 } else {
-  // the button X is not pressed
+  // Button X is not pressed
+}
+
+val stickLeftX = gamepadMap[GamepadButton.STICK_LEFT_X]
+if (stickLeftX == 0f) {
+    // Left stick is positioned at the center
+} else {
+    // Left stick is not positioned at the center, going from -1f to 1f (left to right)
+    // For example: if the value is -0.5f it means the stick is halfway to the left
 }
 ```
 
