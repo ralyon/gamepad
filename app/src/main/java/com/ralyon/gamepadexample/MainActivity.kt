@@ -55,18 +55,36 @@ class MainActivity : AppCompatActivity() {
         }
 
         val stickLeftY = gamepadMap[GamepadButton.STICK_LEFT_Y]
-        if (stickLeftY!! != 0f) {
+        if (stickLeftY != 0f) {
             Log.i(TAG, "STICK_LEFT_Y: $stickLeftY")
         }
 
+        if (gamepadMap[GamepadButton.STICK_LEFT_BUTTON] == 1f) {
+            Log.i(TAG, "STICK_LEFT_BUTTON")
+        }
+
         val stickRightX = gamepadMap[GamepadButton.STICK_RIGHT_X]
-        if (stickRightX!! != 0f) {
+        if (stickRightX != 0f) {
             Log.i(TAG, "STICK_RIGHT_X: $stickRightX")
         }
 
         val stickRightY = gamepadMap[GamepadButton.STICK_RIGHT_Y]
-        if (stickRightY!! != 0f) {
+        if (stickRightY != 0f) {
             Log.i(TAG, "STICK_RIGHT_Y: $stickRightY")
+        }
+
+        if (gamepadMap[GamepadButton.STICK_RIGHT_BUTTON] == 1f) {
+            Log.i(TAG, "STICK_RIGHT_BUTTON")
+        }
+
+        val triggerLeft = gamepadMap[GamepadButton.TRIGGER_LEFT]
+        if (triggerLeft != 0f) {
+            Log.i(TAG, "TRIGGER_LEFT: $triggerLeft")
+        }
+
+        val triggerRight = gamepadMap[GamepadButton.TRIGGER_RIGHT]
+        if (triggerRight != 0f) {
+            Log.i(TAG, "TRIGGER_RIGHT: $triggerRight")
         }
 
         if (gamepadMap[GamepadButton.BUTTON_A] == 1f) {
@@ -91,6 +109,14 @@ class MainActivity : AppCompatActivity() {
 
         if (gamepadMap[GamepadButton.BUTTON_L1] == 1f) {
             Log.i(TAG, "BUTTON_L1")
+        }
+
+        if (gamepadMap[GamepadButton.BUTTON_START] == 1f) {
+            Log.i(TAG, "BUTTON_START")
+        }
+
+        if (gamepadMap[GamepadButton.BUTTON_SELECT] == 1f) {
+            Log.i(TAG, "BUTTON_SELECT")
         }
     }
 

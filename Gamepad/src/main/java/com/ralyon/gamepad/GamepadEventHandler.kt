@@ -18,14 +18,18 @@ class GamepadEventHandler {
         mButtonList[GamepadButton.BUTTON_L1] = 0f
         mButtonList[GamepadButton.STICK_LEFT_X] = 0f
         mButtonList[GamepadButton.STICK_LEFT_Y] = 0f
+        mButtonList[GamepadButton.STICK_LEFT_BUTTON] = 0f
         mButtonList[GamepadButton.STICK_RIGHT_X] = 0f
         mButtonList[GamepadButton.STICK_RIGHT_Y] = 0f
+        mButtonList[GamepadButton.STICK_RIGHT_BUTTON] = 0f
         mButtonList[GamepadButton.TRIGGER_LEFT] = 0f
         mButtonList[GamepadButton.TRIGGER_RIGHT] = 0f
         mButtonList[GamepadButton.DPAD_UP] = 0f
         mButtonList[GamepadButton.DPAD_DOWN] = 0f
         mButtonList[GamepadButton.DPAD_LEFT] = 0f
         mButtonList[GamepadButton.DPAD_RIGHT] = 0f
+        mButtonList[GamepadButton.BUTTON_START] = 0f
+        mButtonList[GamepadButton.BUTTON_SELECT] = 0f
     }
 
     fun getButtonList(): MutableMap<Int, Float> {
@@ -37,12 +41,12 @@ class GamepadEventHandler {
 
         // Left control stick and hat
         // Horizontal distance
-        var leftStickX = getCenteredAxis(event, inputDevice, MotionEvent.AXIS_X, historyPos)
-        var dpadX = getCenteredAxis(event, inputDevice, MotionEvent.AXIS_HAT_X, historyPos)
+        val leftStickX = getCenteredAxis(event, inputDevice, MotionEvent.AXIS_X, historyPos)
+        val dpadX = getCenteredAxis(event, inputDevice, MotionEvent.AXIS_HAT_X, historyPos)
 
         // Vertical distance
-        var leftStickY = getCenteredAxis(event, inputDevice, MotionEvent.AXIS_Y, historyPos)
-        var dpadY = getCenteredAxis(event, inputDevice, MotionEvent.AXIS_HAT_Y, historyPos)
+        val leftStickY = getCenteredAxis(event, inputDevice, MotionEvent.AXIS_Y, historyPos)
+        val dpadY = getCenteredAxis(event, inputDevice, MotionEvent.AXIS_HAT_Y, historyPos)
 
         // Right control stick
         // Horizontal distance
@@ -96,6 +100,22 @@ class GamepadEventHandler {
 
             KeyEvent.KEYCODE_BUTTON_L1 ->
                 mButtonList[GamepadButton.BUTTON_L1] =
+                    if (action == KeyEvent.ACTION_DOWN) 1f else 0f
+
+            KeyEvent.KEYCODE_BUTTON_THUMBL ->
+                mButtonList[GamepadButton.STICK_LEFT_BUTTON] =
+                    if (action == KeyEvent.ACTION_DOWN) 1f else 0f
+
+            KeyEvent.KEYCODE_BUTTON_THUMBR ->
+                mButtonList[GamepadButton.STICK_RIGHT_BUTTON] =
+                    if (action == KeyEvent.ACTION_DOWN) 1f else 0f
+
+            KeyEvent.KEYCODE_BUTTON_START ->
+                mButtonList[GamepadButton.BUTTON_START] =
+                    if (action == KeyEvent.ACTION_DOWN) 1f else 0f
+
+            KeyEvent.KEYCODE_BUTTON_SELECT ->
+                mButtonList[GamepadButton.BUTTON_SELECT] =
                     if (action == KeyEvent.ACTION_DOWN) 1f else 0f
         }
     }
