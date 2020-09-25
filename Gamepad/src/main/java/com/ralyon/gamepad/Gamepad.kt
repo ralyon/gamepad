@@ -39,7 +39,7 @@ class Gamepad {
         }
     }
 
-    fun getGamepadMap(): MutableMap<GamepadButton, Float> {
+    fun getGamepadMap(): Map<Int, Float> {
         return mEventHandler.getButtonList()
     }
 
