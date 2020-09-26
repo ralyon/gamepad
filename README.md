@@ -4,6 +4,23 @@ A small Android library that helps you easily support game controllers in your a
 
 The library goal is to simplify the implementation of bluetooth game controllers (such as the Microsoft Xbox One Controller) by providing instant access to the gamepad button state.
 
+Installation
+-----------
+
+In your **project** ``build.gradle``:
+```gradle
+allprojects {
+    repositories {
+        google()
+        jcenter()
+        maven { url 'https://jitpack.io' } // add this line
+    }
+}
+```
+In your **app module** ``build.gradle``:
+```gradle
+implementation 'com.github.ralyon:gamepad:1.0.0'
+```
 
 How to use
 ---------
