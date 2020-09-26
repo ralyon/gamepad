@@ -10,6 +10,8 @@ class GamepadEventHandler {
     private var mButtonList = mutableMapOf<Int, Float>()
 
     init {
+        mButtonList[GamepadButton.BUTTON_START] = 0f
+        mButtonList[GamepadButton.BUTTON_SELECT] = 0f
         mButtonList[GamepadButton.BUTTON_X] = 0f
         mButtonList[GamepadButton.BUTTON_Y] = 0f
         mButtonList[GamepadButton.BUTTON_B] = 0f
@@ -28,8 +30,6 @@ class GamepadEventHandler {
         mButtonList[GamepadButton.DPAD_DOWN] = 0f
         mButtonList[GamepadButton.DPAD_LEFT] = 0f
         mButtonList[GamepadButton.DPAD_RIGHT] = 0f
-        mButtonList[GamepadButton.BUTTON_START] = 0f
-        mButtonList[GamepadButton.BUTTON_SELECT] = 0f
     }
 
     fun getButtonList(): MutableMap<Int, Float> {
@@ -82,6 +82,14 @@ class GamepadEventHandler {
         val action = event.action
 
         when (event.keyCode) {
+            KeyEvent.KEYCODE_BUTTON_START ->
+                mButtonList[GamepadButton.BUTTON_START] =
+                    if (action == KeyEvent.ACTION_DOWN) 1f else 0f
+
+            KeyEvent.KEYCODE_BUTTON_SELECT ->
+                mButtonList[GamepadButton.BUTTON_SELECT] =
+                    if (action == KeyEvent.ACTION_DOWN) 1f else 0f
+
             KeyEvent.KEYCODE_BUTTON_X ->
                 mButtonList[GamepadButton.BUTTON_X] = if (action == KeyEvent.ACTION_DOWN) 1f else 0f
 
@@ -108,14 +116,6 @@ class GamepadEventHandler {
 
             KeyEvent.KEYCODE_BUTTON_THUMBR ->
                 mButtonList[GamepadButton.STICK_RIGHT_BUTTON] =
-                    if (action == KeyEvent.ACTION_DOWN) 1f else 0f
-
-            KeyEvent.KEYCODE_BUTTON_START ->
-                mButtonList[GamepadButton.BUTTON_START] =
-                    if (action == KeyEvent.ACTION_DOWN) 1f else 0f
-
-            KeyEvent.KEYCODE_BUTTON_SELECT ->
-                mButtonList[GamepadButton.BUTTON_SELECT] =
                     if (action == KeyEvent.ACTION_DOWN) 1f else 0f
         }
     }

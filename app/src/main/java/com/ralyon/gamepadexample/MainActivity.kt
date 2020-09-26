@@ -21,8 +21,10 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        // Gamepad initialization
         gamepad = Gamepad()
 
+        // Task that calls getGamepadMap() every 100 ms
         handler = Handler(Looper.getMainLooper())
         runnable = object : Runnable {
             override fun run() {
@@ -32,6 +34,10 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Reads the gamepad buttons values and logs if a button is pressed
+     * @param gamepadMap the gamepad buttons status map
+     */
     fun handleGamepadInput(gamepadMap: Map<Int, Float>) {
         if (gamepadMap[GamepadButton.DPAD_UP] == 1f) {
             Log.i(TAG, "DPAD_UP")
