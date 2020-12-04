@@ -19,7 +19,7 @@ allprojects {
 ```
 In your **app module** ``build.gradle``:
 ```gradle
-implementation 'com.github.ralyon:gamepad:1.0.0'
+implementation 'com.github.ralyon:gamepad:1.0.1'
 ```
 
 How to use
