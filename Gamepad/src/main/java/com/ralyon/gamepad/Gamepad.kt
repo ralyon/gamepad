@@ -3,6 +3,9 @@ package com.ralyon.gamepad
 import android.view.InputDevice
 import android.view.KeyEvent
 import android.view.MotionEvent
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 
 class Gamepad {
 
@@ -10,7 +13,7 @@ class Gamepad {
 
     /**
      * Checks if the MotionEvent comes from a game controller
-     * @param event the event to check
+     * @param event The event to check
      */
     fun shouldHandleMotionEvent(event: MotionEvent): Boolean {
         return event.source and InputDevice.SOURCE_JOYSTICK == InputDevice.SOURCE_JOYSTICK && event.action == MotionEvent.ACTION_MOVE
@@ -18,7 +21,7 @@ class Gamepad {
 
     /**
      * Pass the MotionEvent to the event handler
-     * @param event the event to pass
+     * @param event The event to pass
      */
     fun handleMotionEvent(event: MotionEvent) {
         // Process all historical movement samples in the batch
@@ -38,7 +41,7 @@ class Gamepad {
 
     /**
      * Check if the KeyEvent comes from a game controller
-     * @param event the event to check
+     * @param event The event to check
      */
     fun shouldHandleKeyEvent(event: KeyEvent): Boolean {
         return event.source and InputDevice.SOURCE_GAMEPAD == InputDevice.SOURCE_GAMEPAD
@@ -46,7 +49,7 @@ class Gamepad {
 
     /**
      * Pass the KeyEvent to the event handler
-     * @param event the event to pass
+     * @param event The event to pass
      */
     fun handleKeyEvent(event: KeyEvent) {
         if (event.repeatCount == 0) {
@@ -56,10 +59,22 @@ class Gamepad {
 
     /**
      * Get the current gamepad buttons status map from the event handler
-     * @return the gamepad buttons status map
+     * @return The gamepad buttons status map
      */
     fun getGamepadMap(): Map<Int, Float> {
         return mEventHandler.getButtonList()
+    }
+
+    /**
+     * Get the current gamepad buttons status map as a coroutine Flow
+     * @return The gamepad buttons status map Flow
+     */
+    suspend fun getGamepadMapFlow(interval: Long): Flow<Map<Int, Float>> = flow {
+        while (true) {
+            val currentMap = getGamepadMap()
+            emit(currentMap)
+            delay(interval)
+        }
     }
 
 }
