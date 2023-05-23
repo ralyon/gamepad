@@ -5,49 +5,58 @@ import android.os.Bundle
 import android.view.KeyEvent
 import android.view.MotionEvent
 import android.view.View
-import android.widget.Button
-import android.widget.LinearLayout
-import android.widget.ScrollView
 import android.widget.TextView
 import androidx.activity.viewModels
 import com.ralyon.gamepad.Gamepad
+import com.ralyon.gamepad.GamepadButton
+import com.ralyon.gamepad.GamepadButtonType
+import com.ralyon.gamepadexample.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
     private val viewModel: MainViewModel by viewModels()
+    private lateinit var binding: ActivityMainBinding
     private lateinit var gamepad: Gamepad
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         gamepad = Gamepad()
 
-        val rootView = findViewById<ScrollView>(R.id.root)
-        val logsContainer = findViewById<LinearLayout>(R.id.logs_container)
-        val startButton = findViewById<Button>(R.id.start_button)
-
         viewModel.gamepadMap.observe(this) { map ->
-            GamepadHandler.handleInput(map) {
-                val textView = TextView(this)
-                textView.text = it
-                logsContainer.addView(textView)
-                rootView.fullScroll(View.FOCUS_DOWN)
-            }
+            logValues(map)
         }
 
-        var isCollecting = false
-        startButton.setOnClickListener {
-            if (!isCollecting) {
+        binding.startButton.setOnClickListener {
+            if (!viewModel.isCollecting) {
                 viewModel.startCollectingGamepadMap(gamepad, 100)
-                startButton.text = getString(R.string.stop)
+                binding.startButton.text = getString(R.string.stop)
             } else {
                 viewModel.stopCollectingGamepadMap()
-                startButton.text = getString(R.string.start)
+                binding.startButton.text = getString(R.string.start)
             }
-            isCollecting = !isCollecting
         }
+    }
 
+    private fun logValues(gamepadMap: Map<GamepadButtonType, GamepadButton>) {
+        gamepadMap.forEach {
+            if (it.value.value == 0f) {
+                return@forEach
+            }
+
+            val logText = if (it.value.isButton) {
+                it.key.toString()
+            } else {
+                "${it.key}: ${it.value.value}"
+            }
+
+            val textView = TextView(this@MainActivity)
+            textView.text = logText
+            binding.logsContainer.addView(textView)
+            binding.root.fullScroll(View.FOCUS_DOWN)
+        }
     }
 
     override fun dispatchKeyEvent(event: KeyEvent): Boolean {

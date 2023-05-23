@@ -4,37 +4,33 @@ import android.view.InputDevice
 import android.view.KeyEvent
 import android.view.MotionEvent
 import kotlin.math.abs
+import com.ralyon.gamepad.GamepadButtonType.*
 
 class GamepadEventHandler {
 
-    private var mButtonList = mutableMapOf<Int, Float>()
-
-    init {
-        mButtonList[GamepadButton.BUTTON_START] = 0f
-        mButtonList[GamepadButton.BUTTON_SELECT] = 0f
-        mButtonList[GamepadButton.BUTTON_X] = 0f
-        mButtonList[GamepadButton.BUTTON_Y] = 0f
-        mButtonList[GamepadButton.BUTTON_B] = 0f
-        mButtonList[GamepadButton.BUTTON_A] = 0f
-        mButtonList[GamepadButton.BUTTON_R1] = 0f
-        mButtonList[GamepadButton.BUTTON_L1] = 0f
-        mButtonList[GamepadButton.STICK_LEFT_X] = 0f
-        mButtonList[GamepadButton.STICK_LEFT_Y] = 0f
-        mButtonList[GamepadButton.STICK_LEFT_BUTTON] = 0f
-        mButtonList[GamepadButton.STICK_RIGHT_X] = 0f
-        mButtonList[GamepadButton.STICK_RIGHT_Y] = 0f
-        mButtonList[GamepadButton.STICK_RIGHT_BUTTON] = 0f
-        mButtonList[GamepadButton.TRIGGER_LEFT] = 0f
-        mButtonList[GamepadButton.TRIGGER_RIGHT] = 0f
-        mButtonList[GamepadButton.DPAD_UP] = 0f
-        mButtonList[GamepadButton.DPAD_DOWN] = 0f
-        mButtonList[GamepadButton.DPAD_LEFT] = 0f
-        mButtonList[GamepadButton.DPAD_RIGHT] = 0f
-    }
-
-    fun getButtonList(): MutableMap<Int, Float> {
-        return mButtonList
-    }
+    var buttonMap: Map<GamepadButtonType, GamepadButton> = mapOf(
+        BUTTON_START to GamepadButton(isButton = true),
+        BUTTON_SELECT to GamepadButton(isButton = true),
+        BUTTON_X to GamepadButton(isButton = true),
+        BUTTON_Y to GamepadButton(isButton = true),
+        BUTTON_B to GamepadButton(isButton = true),
+        BUTTON_A to GamepadButton(isButton = true),
+        BUTTON_R1 to GamepadButton(isButton = true),
+        BUTTON_L1 to GamepadButton(isButton = true),
+        STICK_LEFT_X to GamepadButton(isStick = true),
+        STICK_LEFT_Y to GamepadButton(isStick = true),
+        STICK_LEFT_BUTTON to GamepadButton(isButton = true),
+        STICK_RIGHT_BUTTON to GamepadButton(isButton = true),
+        STICK_RIGHT_X to GamepadButton(isStick = true),
+        STICK_RIGHT_Y to GamepadButton(isStick = true),
+        TRIGGER_LEFT to GamepadButton(isTrigger = true),
+        TRIGGER_RIGHT to GamepadButton(isTrigger = true),
+        DPAD_UP to GamepadButton(isButton = true),
+        DPAD_DOWN to GamepadButton(isButton = true),
+        DPAD_LEFT to GamepadButton(isButton = true),
+        DPAD_RIGHT to GamepadButton(isButton = true)
+    )
+        private set
 
     fun processJoystickInput(event: MotionEvent, historyPos: Int) {
         val inputDevice = event.device
@@ -66,57 +62,51 @@ class GamepadEventHandler {
         else
             event.getHistoricalAxisValue(MotionEvent.AXIS_GAS, historyPos)
 
-        mButtonList[GamepadButton.STICK_LEFT_X] = leftStickX
-        mButtonList[GamepadButton.STICK_LEFT_Y] = leftStickY
-        mButtonList[GamepadButton.STICK_RIGHT_X] = rightStickX
-        mButtonList[GamepadButton.STICK_RIGHT_Y] = rightStickY
-        mButtonList[GamepadButton.TRIGGER_LEFT] = triggerLeft
-        mButtonList[GamepadButton.TRIGGER_RIGHT] = triggerRight
-        mButtonList[GamepadButton.DPAD_UP] = if (dpadY == -1f) 1f else 0f
-        mButtonList[GamepadButton.DPAD_DOWN] = if (dpadY == 1f) 1f else 0f
-        mButtonList[GamepadButton.DPAD_LEFT] = if (dpadX == -1f) 1f else 0f
-        mButtonList[GamepadButton.DPAD_RIGHT] = if (dpadX == 1f) 1f else 0f
+        buttonMap[STICK_LEFT_X]?.value = leftStickX
+        buttonMap[STICK_LEFT_Y]?.value = leftStickY
+        buttonMap[STICK_RIGHT_X]?.value = rightStickX
+        buttonMap[STICK_RIGHT_Y]?.value = rightStickY
+        buttonMap[TRIGGER_LEFT]?.value = triggerLeft
+        buttonMap[TRIGGER_RIGHT]?.value = triggerRight
+        buttonMap[DPAD_UP]?.value = if (dpadY == -1f) 1f else 0f
+        buttonMap[DPAD_DOWN]?.value = if (dpadY == 1f) 1f else 0f
+        buttonMap[DPAD_LEFT]?.value = if (dpadX == -1f) 1f else 0f
+        buttonMap[DPAD_RIGHT]?.value = if (dpadX == 1f) 1f else 0f
     }
 
     fun handleButtonPressed(event: KeyEvent) {
         val action = event.action
 
         when (event.keyCode) {
-            KeyEvent.KEYCODE_BUTTON_START ->
-                mButtonList[GamepadButton.BUTTON_START] =
-                    if (action == KeyEvent.ACTION_DOWN) 1f else 0f
+            KeyEvent.KEYCODE_BUTTON_START -> buttonMap[BUTTON_START]?.value =
+                if (action == KeyEvent.ACTION_DOWN) 1f else 0f
 
-            KeyEvent.KEYCODE_BUTTON_SELECT ->
-                mButtonList[GamepadButton.BUTTON_SELECT] =
-                    if (action == KeyEvent.ACTION_DOWN) 1f else 0f
+            KeyEvent.KEYCODE_BUTTON_SELECT -> buttonMap[BUTTON_SELECT]?.value =
+                if (action == KeyEvent.ACTION_DOWN) 1f else 0f
 
-            KeyEvent.KEYCODE_BUTTON_X ->
-                mButtonList[GamepadButton.BUTTON_X] = if (action == KeyEvent.ACTION_DOWN) 1f else 0f
+            KeyEvent.KEYCODE_BUTTON_X -> buttonMap[BUTTON_X]?.value =
+                if (action == KeyEvent.ACTION_DOWN) 1f else 0f
 
-            KeyEvent.KEYCODE_BUTTON_A ->
-                mButtonList[GamepadButton.BUTTON_A] = if (action == KeyEvent.ACTION_DOWN) 1f else 0f
+            KeyEvent.KEYCODE_BUTTON_A -> buttonMap[BUTTON_A]?.value =
+                if (action == KeyEvent.ACTION_DOWN) 1f else 0f
 
-            KeyEvent.KEYCODE_BUTTON_Y ->
-                mButtonList[GamepadButton.BUTTON_Y] = if (action == KeyEvent.ACTION_DOWN) 1f else 0f
+            KeyEvent.KEYCODE_BUTTON_Y -> buttonMap[BUTTON_Y]?.value =
+                if (action == KeyEvent.ACTION_DOWN) 1f else 0f
 
-            KeyEvent.KEYCODE_BUTTON_B ->
-                mButtonList[GamepadButton.BUTTON_B] = if (action == KeyEvent.ACTION_DOWN) 1f else 0f
+            KeyEvent.KEYCODE_BUTTON_B -> buttonMap[BUTTON_B]?.value =
+                if (action == KeyEvent.ACTION_DOWN) 1f else 0f
 
-            KeyEvent.KEYCODE_BUTTON_R1 ->
-                mButtonList[GamepadButton.BUTTON_R1] =
-                    if (action == KeyEvent.ACTION_DOWN) 1f else 0f
+            KeyEvent.KEYCODE_BUTTON_R1 -> buttonMap[BUTTON_R1]?.value =
+                if (action == KeyEvent.ACTION_DOWN) 1f else 0f
 
-            KeyEvent.KEYCODE_BUTTON_L1 ->
-                mButtonList[GamepadButton.BUTTON_L1] =
-                    if (action == KeyEvent.ACTION_DOWN) 1f else 0f
+            KeyEvent.KEYCODE_BUTTON_L1 -> buttonMap[BUTTON_L1]?.value =
+                if (action == KeyEvent.ACTION_DOWN) 1f else 0f
 
-            KeyEvent.KEYCODE_BUTTON_THUMBL ->
-                mButtonList[GamepadButton.STICK_LEFT_BUTTON] =
-                    if (action == KeyEvent.ACTION_DOWN) 1f else 0f
+            KeyEvent.KEYCODE_BUTTON_THUMBL -> buttonMap[STICK_LEFT_BUTTON]?.value =
+                if (action == KeyEvent.ACTION_DOWN) 1f else 0f
 
-            KeyEvent.KEYCODE_BUTTON_THUMBR ->
-                mButtonList[GamepadButton.STICK_RIGHT_BUTTON] =
-                    if (action == KeyEvent.ACTION_DOWN) 1f else 0f
+            KeyEvent.KEYCODE_BUTTON_THUMBR -> buttonMap[STICK_RIGHT_BUTTON]?.value =
+                if (action == KeyEvent.ACTION_DOWN) 1f else 0f
         }
     }
 
