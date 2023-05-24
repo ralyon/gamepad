@@ -1,4 +1,4 @@
-package com.ralyon.gamepadexample
+package com.ralyon.sample.compose
 
 import org.junit.Test
 

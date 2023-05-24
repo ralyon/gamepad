@@ -9,26 +9,26 @@ import com.ralyon.gamepad.GamepadButtonType.*
 class GamepadEventHandler {
 
     var buttonMap: Map<GamepadButtonType, GamepadButton> = mapOf(
-        BUTTON_START to GamepadButton(isButton = true),
-        BUTTON_SELECT to GamepadButton(isButton = true),
-        BUTTON_X to GamepadButton(isButton = true),
-        BUTTON_Y to GamepadButton(isButton = true),
-        BUTTON_B to GamepadButton(isButton = true),
-        BUTTON_A to GamepadButton(isButton = true),
-        BUTTON_R1 to GamepadButton(isButton = true),
-        BUTTON_L1 to GamepadButton(isButton = true),
+        BUTTON_START to GamepadButton(),
+        BUTTON_SELECT to GamepadButton(),
+        BUTTON_X to GamepadButton(),
+        BUTTON_Y to GamepadButton(),
+        BUTTON_B to GamepadButton(),
+        BUTTON_A to GamepadButton(),
+        BUTTON_R1 to GamepadButton(),
+        BUTTON_L1 to GamepadButton(),
         STICK_LEFT_X to GamepadButton(isStick = true),
         STICK_LEFT_Y to GamepadButton(isStick = true),
-        STICK_LEFT_BUTTON to GamepadButton(isButton = true),
-        STICK_RIGHT_BUTTON to GamepadButton(isButton = true),
+        STICK_LEFT_BUTTON to GamepadButton(),
+        STICK_RIGHT_BUTTON to GamepadButton(),
         STICK_RIGHT_X to GamepadButton(isStick = true),
         STICK_RIGHT_Y to GamepadButton(isStick = true),
         TRIGGER_LEFT to GamepadButton(isTrigger = true),
         TRIGGER_RIGHT to GamepadButton(isTrigger = true),
-        DPAD_UP to GamepadButton(isButton = true),
-        DPAD_DOWN to GamepadButton(isButton = true),
-        DPAD_LEFT to GamepadButton(isButton = true),
-        DPAD_RIGHT to GamepadButton(isButton = true)
+        DPAD_UP to GamepadButton(),
+        DPAD_DOWN to GamepadButton(),
+        DPAD_LEFT to GamepadButton(),
+        DPAD_RIGHT to GamepadButton()
     )
         private set
 

@@ -1,4 +1,4 @@
-package com.ralyon.gamepadexample
+package com.ralyon.sample
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -16,23 +16,40 @@ class MainViewModel : ViewModel() {
     private val _gamepadMap = MutableLiveData<Map<GamepadButtonType, GamepadButton>>()
     val gamepadMap: LiveData<Map<GamepadButtonType, GamepadButton>> = _gamepadMap
 
-    var isCollecting = false
+    private val _buttonText = MutableLiveData(R.string.start)
+    val buttonText: LiveData<Int> = _buttonText
+
+    var gamepad = Gamepad()
         private set
 
+    private var isCollecting = false
     private var gamepadMapJob: Job? = null
 
-    fun startCollectingGamepadMap(gamepad: Gamepad, interval: Long) {
+    fun onStartButtonPressed() {
+        if (isCollecting) {
+            stopCollectingGamepadMap()
+        } else {
+            startCollectingGamepadMap()
+        }
+    }
+
+    private fun startCollectingGamepadMap() {
         gamepadMapJob = viewModelScope.launch {
             isCollecting = true
-            gamepad.gamepadMap.asFlow(interval).collect {
-                _gamepadMap.postValue(it)
+            _buttonText.value = R.string.stop
+            gamepad.gamepadMap.asFlow(INTERVAL).collect {
+                _gamepadMap.value = it
             }
         }
     }
 
-    fun stopCollectingGamepadMap() {
+    private fun stopCollectingGamepadMap() {
         gamepadMapJob?.cancel()
         isCollecting = false
+        _buttonText.value = R.string.start
     }
 
+    companion object {
+        private const val INTERVAL = 100L
+    }
 }

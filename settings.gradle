@@ -12,6 +12,7 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
-rootProject.name = "GamepadExample"
+rootProject.name = "Gamepad"
 include ':sample'
 include ':gamepad'
+include ':sample-compose'

@@ -1,4 +1,4 @@
-package com.ralyon.gamepadexample
+package com.ralyon.sample
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -7,49 +7,43 @@ import android.view.MotionEvent
 import android.view.View
 import android.widget.TextView
 import androidx.activity.viewModels
-import com.ralyon.gamepad.Gamepad
 import com.ralyon.gamepad.GamepadButton
 import com.ralyon.gamepad.GamepadButtonType
-import com.ralyon.gamepadexample.databinding.ActivityMainBinding
+import com.ralyon.sample.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
     private val viewModel: MainViewModel by viewModels()
     private lateinit var binding: ActivityMainBinding
-    private lateinit var gamepad: Gamepad
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        gamepad = Gamepad()
-
         viewModel.gamepadMap.observe(this) { map ->
             logValues(map)
         }
 
+        viewModel.buttonText.observe(this) {
+            binding.startButton.text = getString(it)
+        }
+
         binding.startButton.setOnClickListener {
-            if (!viewModel.isCollecting) {
-                viewModel.startCollectingGamepadMap(gamepad, 100)
-                binding.startButton.text = getString(R.string.stop)
-            } else {
-                viewModel.stopCollectingGamepadMap()
-                binding.startButton.text = getString(R.string.start)
-            }
+            viewModel.onStartButtonPressed()
         }
     }
 
     private fun logValues(gamepadMap: Map<GamepadButtonType, GamepadButton>) {
-        gamepadMap.forEach {
-            if (it.value.value == 0f) {
+        gamepadMap.forEach { (type, button) ->
+            if (button.value == 0f) {
                 return@forEach
             }
 
-            val logText = if (it.value.isButton) {
-                it.key.toString()
+            val logText = if (!button.isStick && !button.isTrigger) {
+                "${type}: ${button.value}"
             } else {
-                "${it.key}: ${it.value.value}"
+                type.toString()
             }
 
             val textView = TextView(this@MainActivity)
@@ -60,16 +54,16 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun dispatchKeyEvent(event: KeyEvent): Boolean {
-        if (gamepad.shouldHandleKeyEvent(event)) {
-            gamepad.handleKeyEvent(event)
+        if (viewModel.gamepad.shouldHandleKeyEvent(event)) {
+            viewModel.gamepad.handleKeyEvent(event)
             return true
         }
         return super.dispatchKeyEvent(event)
     }
 
     override fun dispatchGenericMotionEvent(event: MotionEvent): Boolean {
-        if (gamepad.shouldHandleMotionEvent(event)) {
-            gamepad.handleMotionEvent(event)
+        if (viewModel.gamepad.shouldHandleMotionEvent(event)) {
+            viewModel.gamepad.handleMotionEvent(event)
             return true
         }
         return super.dispatchGenericMotionEvent(event)
